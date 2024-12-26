@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exécuter une requête SPARQL</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <h1>Exécuter une requête SPARQL</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Exécuter la requête</button>
+    </form>
+
+    {% if error %}
+        <p style="color: red;">Erreur : {{ error }}</p>
+    {% elif results %}
+        <h2>Résultats de la requête</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    {% for key in results.0.keys %}
+                        <th>{{ key }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                    <tr>
+                        {% for value in result.values %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Aucun résultat trouvé.</p>
+    {% endif %}
+</body>
+</html>
